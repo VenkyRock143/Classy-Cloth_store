@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import { ShoppingBag, X, Search, Plus, Minus, Trash2, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// --- 1. THE REDUCER (Interview Gold) ---
+// --- 1. THE REDUCER ---
 const cartReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_TO_CART':
@@ -29,7 +29,6 @@ const cartReducer = (state, action) => {
 };
 
 const ClothingStore = () => {
-  // --- 2. STATE INITIALIZATION ---
   const [cart, dispatch] = useReducer(cartReducer, [], () => {
     const localData = localStorage.getItem('studio_cart');
     return localData ? JSON.parse(localData) : [];
@@ -42,17 +41,16 @@ const ClothingStore = () => {
   const [selectedSize, setSelectedSize] = useState('M');
   const [showToast, setShowToast] = useState(false);
 
-  // --- 3. PERSISTENCE ---
   useEffect(() => {
     localStorage.setItem('studio_cart', JSON.stringify(cart));
   }, [cart]);
 
-  // --- 4. DYNAMIC DATA ---
+  // Updated Prices to INR (typical premium range)
   const PRODUCTS = [
-    { id: 1, name: 'Trench Coat', price: 245, cat: 'Outerwear', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800', desc: 'Premium gabardine construction.' },
-    { id: 2, name: 'Selvedge Denim', price: 120, cat: 'Pants', img: 'https://images.unsplash.com/photo-1725387072845-7431bbc453bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8U2VsdmVkZ2UlMjBEZW5pbXxlbnwwfHwwfHx8MA%3D%3D', desc: 'Japanese raw denim.' },
-    { id: 3, name: 'Oversized Hoodie', price: 95, cat: 'Basics', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', desc: 'Heavyweight organic cotton.' },
-    { id: 4, name: 'Linen Shirt', price: 80, cat: 'Shirts', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800', desc: 'Ethically sourced linen.' }
+    { id: 1, name: 'Trench Coat', price: 2499, cat: 'Outerwear', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800', desc: 'Premium gabardine construction.' },
+    { id: 2, name: 'Selvedge Denim', price: 999, cat: 'Pants', img: 'https://images.unsplash.com/photo-1725387072845-7431bbc453bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8U2VsdmVkZ2UlMjBEZW5pbXxlbnwwfHwwfHx8MA%3D%3D', desc: 'Japanese raw denim.' },
+    { id: 3, name: 'Oversized Hoodie', price: 31499, cat: 'Basics', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', desc: 'Heavyweight organic cotton.' },
+    { id: 4, name: 'Linen Shirt', price: 799, cat: 'Shirts', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800', desc: 'Ethically sourced linen.' }
   ];
 
   const filteredProducts = PRODUCTS.filter(p => 
@@ -70,7 +68,6 @@ const ClothingStore = () => {
 
   return (
     <div className="bg-white min-h-screen font-sans text-slate-900">
-      {/* TOAST NOTIFICATION */}
       <AnimatePresence>
         {showToast && (
           <motion.div initial={{ y: -100 }} animate={{ y: 20 }} exit={{ y: -100 }} className="fixed top-0 left-1/2 -translate-x-1/2 z-[200] bg-black text-white px-6 py-3 rounded-full flex items-center gap-2 shadow-2xl">
@@ -80,28 +77,43 @@ const ClothingStore = () => {
         )}
       </AnimatePresence>
 
-      {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 px-6 lg:px-12 h-20 flex items-center justify-between">
-        <div className="text-2xl font-black tracking-tighter uppercase">Classy Comforts Club.</div>
-        <div className="hidden md:flex items-center bg-slate-50 px-4 py-2 rounded-full border border-slate-100">
-          <Search size={16} className="text-slate-400" />
-          <input 
-            type="text" 
-            placeholder="Search collection..." 
-            className="bg-transparent border-none focus:ring-0 text-sm ml-2 w-48"
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 px-6 lg:px-12 py-4">
+        <div className="flex justify-between items-center mb-4 md:mb-0">
+          <div className="text-xl md:text-2xl font-black tracking-tighter uppercase whitespace-nowrap">
+            Classy Comforts Club.
+          </div>
+          
+          <button 
+            onClick={() => setIsCartOpen(true)} 
+            className="p-2 hover:bg-slate-50 rounded-full transition relative flex items-center justify-center"
+          >
+            <ShoppingBag size={24} />
+            {cart.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold border-2 border-white">
+                {cart.length}
+              </span>
+            )}
+          </button>
         </div>
 
-        <button onClick={() => setIsCartOpen(true)} className="relative p-2 hover:bg-slate-50 rounded-full transition">
-          <ShoppingBag size={22} />
-          {cart.length > 0 && <span className="absolute top-0 right-0 bg-red-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center animate-bounce">{cart.length}</span>}
-        </button>
+        <div className="flex justify-center md:absolute md:left-1/2 md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2">
+          <div className="flex items-center bg-slate-100 px-4 py-2 rounded-full border border-slate-200 w-full max-w-[400px] md:w-64 lg:w-96">
+            <Search size={16} className="text-slate-400 shrink-0" />
+            <input 
+              type="text" 
+              placeholder="Search items..." 
+              className="bg-transparent border-none focus:ring-0 text-sm ml-2 w-full"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
       </nav>
-      <div className="text-xl font-black tracking-tighter uppercase italic text-red-600 ml-[10%]">Menswear</div>
 
-      {/* FILTER BAR */}
-      <div className="max-w-7xl mx-auto px-6 pt-12 flex flex-wrap gap-8 items-center border-b border-slate-50 pb-8">
+      <div className="text-xl font-black tracking-tighter uppercase italic text-red-600 px-6 lg:px-12 mt-8">
+        Menswear
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 pt-8 flex flex-wrap gap-4 md:gap-8 items-center border-b border-slate-50 pb-8">
         {['All', 'Outerwear', 'Pants', 'Basics', 'Shirts'].map(cat => (
           <button 
             key={cat}
@@ -112,7 +124,7 @@ const ClothingStore = () => {
           </button>
         ))}
       </div>
-      {/* PRODUCT GRID */}
+
       <main className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         <AnimatePresence mode="popLayout">
           {filteredProducts.map(product => (
@@ -128,7 +140,7 @@ const ClothingStore = () => {
                   <h3 className="text-sm font-bold uppercase tracking-tight">{product.name}</h3>
                   <p className="text-xs text-slate-400 mt-1">{product.cat}</p>
                 </div>
-                <span className="font-medium text-sm">${product.price}</span>
+                <span className="font-medium text-sm">₹{product.price.toLocaleString('en-IN')}</span>
               </div>
             </motion.div>
           ))}
@@ -168,7 +180,7 @@ const ClothingStore = () => {
                             <span className="mx-3 text-xs font-bold">{item.qty}</span>
                             <button onClick={() => dispatch({ type: 'UPDATE_QTY', payload: { ...item, qty: item.qty + 1 } })}><Plus size={12} /></button>
                           </div>
-                          <span className="text-sm font-bold">${item.price * item.qty}</span>
+                          <span className="text-sm font-bold">₹{(item.price * item.qty).toLocaleString('en-IN')}</span>
                         </div>
                       </div>
                     </div>
@@ -180,7 +192,7 @@ const ClothingStore = () => {
                 <div className="pt-8 space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-xs uppercase tracking-widest font-bold text-slate-400">Subtotal</span>
-                    <span className="text-2xl font-black">${cartTotal}</span>
+                    <span className="text-2xl font-black">₹{cartTotal.toLocaleString('en-IN')}</span>
                   </div>
                   <button className="w-full bg-black text-white py-5 font-bold uppercase tracking-widest hover:scale-[1.02] transition shadow-xl">Proceed to Checkout</button>
                 </div>
@@ -190,7 +202,7 @@ const ClothingStore = () => {
         )}
       </AnimatePresence>
 
-      {/* QUICK VIEW MODAL (Simplified) */}
+      {/* QUICK VIEW MODAL */}
       <AnimatePresence>
         {selectedProduct && (
           <div className="fixed inset-0 z-[150] flex items-center justify-center p-6">
@@ -209,7 +221,7 @@ const ClothingStore = () => {
                     ))}
                   </div>
                 </div>
-                <button onClick={() => handleAddToCart(selectedProduct)} className="bg-black text-white py-5 font-black uppercase tracking-[0.2em] shadow-lg">Add to Bag — ${selectedProduct.price}</button>
+                <button onClick={() => handleAddToCart(selectedProduct)} className="bg-black text-white py-5 font-black uppercase tracking-[0.2em] shadow-lg">Add to Bag — ₹{selectedProduct.price.toLocaleString('en-IN')}</button>
               </div>
             </motion.div>
           </div>

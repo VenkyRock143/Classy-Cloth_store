@@ -67,7 +67,7 @@ const ClothingStore = () => {
 
   return (
     <div className="bg-white min-h-screen font-sans text-slate-900">
-      {/* TOAST NOTIFICATION */}
+      {/* TOAST */}
       <AnimatePresence>
         {showToast && (
           <motion.div initial={{ y: -50, opacity: 0 }} animate={{ y: 20, opacity: 1 }} exit={{ y: -50, opacity: 0 }} className="fixed top-0 left-1/2 -translate-x-1/2 z-[300] bg-black text-white px-6 py-3 rounded-full flex items-center gap-2 shadow-2xl">
@@ -77,9 +77,9 @@ const ClothingStore = () => {
         )}
       </AnimatePresence>
 
-      {/* 1. PRIMARY STICKY NAVBAR */}
+      {/* 1. NAVBAR */}
       <nav className="sticky top-0 z-[100] bg-white border-b border-slate-100 px-6 lg:px-12 py-4 h-[130px] md:h-[80px] flex flex-col md:flex-row items-center justify-between">
-        <div className="text-xl md:text-2xl font-black tracking-tighter uppercase mb-4 md:mb-0">
+        <div className="text-xl md:text-2xl font-black tracking-tighter uppercase mb-4 md:mb-0 cursor-default">
           Classy Comforts Club.
         </div>
         
@@ -93,7 +93,7 @@ const ClothingStore = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <button onClick={() => setIsCartOpen(true)} className="p-2 hover:bg-slate-50 rounded-full transition relative">
+          <button onClick={() => setIsCartOpen(true)} className="p-2 hover:bg-slate-50 rounded-full transition relative cursor-pointer">
             <ShoppingBag size={24} />
             {cart.length > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold border-2 border-white">
@@ -104,16 +104,16 @@ const ClothingStore = () => {
         </div>
       </nav>
 
-      {/* 2. SECONDARY STICKY HEADER */}
+      {/* 2. FILTERS */}
       <div className="sticky top-[130px] md:top-[80px] z-[90] bg-white/95 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <h2 className="text-lg font-black tracking-tighter uppercase italic text-red-600">Menswear</h2>
+          <h2 className="text-lg font-black tracking-tighter uppercase italic text-red-600 cursor-default">Menswear</h2>
           <div className="flex gap-4 md:gap-8 overflow-x-auto no-scrollbar">
             {['All', 'Outerwear', 'Pants', 'Basics', 'Shirts'].map(cat => (
               <button 
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`text-[10px] md:text-xs uppercase tracking-widest font-bold whitespace-nowrap transition-all pb-1 ${
+                className={`text-[10px] md:text-xs uppercase tracking-widest font-bold whitespace-nowrap transition-all pb-1 cursor-pointer ${
                   activeCategory === cat ? 'text-black border-b-2 border-black' : 'text-slate-400 hover:text-black'
                 }`}
               >
@@ -129,40 +129,29 @@ const ClothingStore = () => {
         <AnimatePresence mode="popLayout">
           {filteredProducts.map(product => (
             <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} key={product.id} className="group relative">
-              <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 rounded-sm">
+              {/* IMAGE WRAPPER - Changed from zoom-in to cursor-pointer */}
+              <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 rounded-sm cursor-pointer">
                 <img 
                    src={product.img} 
                    alt={product.name} 
-                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 cursor-pointer" 
+                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
                    onClick={() => setSelectedProduct(product)}
                 />
                 
-                {/* MOBILE QUICK ADD BUTTON */}
                 <button 
                   onClick={() => handleAddToCart(product)}
-                  className="absolute bottom-4 right-4 md:hidden bg-black text-white p-3 rounded-full shadow-xl active:scale-90 transition-transform"
+                  className="absolute bottom-4 right-4 md:hidden bg-black text-white p-3 rounded-full shadow-xl active:scale-90 transition-transform cursor-pointer"
                 >
                   <Plus size={20} />
                 </button>
 
-                {/* DESKTOP HOVER BUTTON */}
                 <div className="hidden md:flex absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity items-center justify-center gap-2">
-                  <button 
-                    onClick={() => setSelectedProduct(product)}
-                    className="bg-white text-black px-4 py-2 text-[10px] font-bold uppercase tracking-tighter"
-                  >
-                    View
-                  </button>
-                  <button 
-                    onClick={() => handleAddToCart(product)}
-                    className="bg-black text-white px-4 py-2 text-[10px] font-bold uppercase tracking-tighter"
-                  >
-                    Add to Bag
-                  </button>
+                  <button onClick={() => setSelectedProduct(product)} className="bg-white text-black px-4 py-2 text-[10px] font-bold uppercase tracking-tighter cursor-pointer hover:bg-slate-100">View</button>
+                  <button onClick={() => handleAddToCart(product)} className="bg-black text-white px-4 py-2 text-[10px] font-bold uppercase tracking-tighter cursor-pointer hover:bg-slate-900">Add to Bag</button>
                 </div>
               </div>
 
-              <div className="mt-6 flex justify-between items-start">
+              <div className="mt-6 flex justify-between items-start cursor-default">
                 <div>
                   <h3 className="text-sm font-bold uppercase tracking-tight">{product.name}</h3>
                   <p className="text-xs text-slate-400 mt-1">{product.cat}</p>
@@ -178,48 +167,38 @@ const ClothingStore = () => {
       <AnimatePresence>
         {isCartOpen && (
           <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsCartOpen(false)} className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200]" />
-            <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-[210] shadow-2xl p-8 flex flex-col">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsCartOpen(false)} className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200] cursor-pointer" />
+            <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-[210] shadow-2xl p-8 flex flex-col cursor-default">
               <div className="flex justify-between items-center mb-10">
                 <h2 className="text-2xl font-black uppercase tracking-tighter italic underline decoration-red-500">Your Bag</h2>
-                <button onClick={() => setIsCartOpen(false)}><X size={24} /></button>
+                <button onClick={() => setIsCartOpen(false)} className="cursor-pointer hover:rotate-90 transition-transform"><X size={24} /></button>
               </div>
               <div className="flex-1 overflow-y-auto">
-                {cart.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-slate-400">
-                    <ShoppingBag size={48} />
-                    <p className="mt-4 font-bold text-[10px] uppercase">Empty Bag</p>
-                  </div>
-                ) : (
-                  cart.map((item, i) => (
-                    <div key={i} className="flex gap-4 mb-8 border-b border-slate-50 pb-8">
-                      <img src={item.img} className="w-20 h-24 object-cover rounded-sm" />
-                      <div className="flex-1">
-                        <div className="flex justify-between">
-                          <h4 className="text-xs font-bold uppercase">{item.name}</h4>
-                          <button onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item })}><Trash2 size={14} className="text-slate-300 hover:text-red-500" /></button>
+                {cart.length > 0 ? cart.map((item, i) => (
+                  <div key={i} className="flex gap-4 mb-8 border-b border-slate-50 pb-8">
+                    <img src={item.img} className="w-20 h-24 object-cover rounded-sm" />
+                    <div className="flex-1">
+                      <div className="flex justify-between">
+                        <h4 className="text-xs font-bold uppercase">{item.name}</h4>
+                        <button onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item })} className="cursor-pointer"><Trash2 size={14} className="text-slate-300 hover:text-red-500" /></button>
+                      </div>
+                      <p className="text-[10px] text-slate-400 uppercase mt-1">Size: {item.size}</p>
+                      <div className="flex items-center justify-between mt-4">
+                        <div className="flex items-center border border-slate-200 rounded-full px-2">
+                          <button onClick={() => dispatch({ type: 'UPDATE_QTY', payload: { ...item, qty: item.qty - 1 } })} className="cursor-pointer px-1"><Minus size={12} /></button>
+                          <span className="mx-3 text-xs font-bold">{item.qty}</span>
+                          <button onClick={() => dispatch({ type: 'UPDATE_QTY', payload: { ...item, qty: item.qty + 1 } })} className="cursor-pointer px-1"><Plus size={12} /></button>
                         </div>
-                        <p className="text-[10px] text-slate-400 uppercase mt-1">Size: {item.size}</p>
-                        <div className="flex items-center justify-between mt-4">
-                          <div className="flex items-center border border-slate-200 rounded-full px-2">
-                            <button onClick={() => dispatch({ type: 'UPDATE_QTY', payload: { ...item, qty: item.qty - 1 } })}><Minus size={12} /></button>
-                            <span className="mx-3 text-xs font-bold">{item.qty}</span>
-                            <button onClick={() => dispatch({ type: 'UPDATE_QTY', payload: { ...item, qty: item.qty + 1 } })}><Plus size={12} /></button>
-                          </div>
-                          <span className="text-sm font-bold">₹{(item.price * item.qty).toLocaleString('en-IN')}</span>
-                        </div>
+                        <span className="text-sm font-bold">₹{(item.price * item.qty).toLocaleString('en-IN')}</span>
                       </div>
                     </div>
-                  ))
-                )}
+                  </div>
+                )) : <div className="h-full flex flex-col items-center justify-center text-slate-400"><ShoppingBag size={48}/><p className="mt-4 font-bold text-[10px] uppercase">Empty Bag</p></div>}
               </div>
               {cart.length > 0 && (
                 <div className="pt-8">
-                  <div className="flex justify-between mb-4">
-                    <span className="text-xs font-bold uppercase text-slate-400">Total</span>
-                    <span className="text-2xl font-black">₹{cartTotal.toLocaleString('en-IN')}</span>
-                  </div>
-                  <button className="w-full bg-black text-white py-5 font-bold uppercase tracking-widest">Checkout</button>
+                  <div className="flex justify-between mb-4"><span className="text-xs font-bold uppercase text-slate-400">Total</span><span className="text-2xl font-black">₹{cartTotal.toLocaleString('en-IN')}</span></div>
+                  <button className="w-full bg-black text-white py-5 font-bold uppercase tracking-widest cursor-pointer hover:bg-slate-900 transition-colors">Checkout</button>
                 </div>
               )}
             </motion.div>
@@ -231,9 +210,9 @@ const ClothingStore = () => {
       <AnimatePresence>
         {selectedProduct && (
           <div className="fixed inset-0 z-[250] flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedProduct(null)} className="absolute inset-0 bg-black/80 backdrop-blur-md" />
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto grid md:grid-cols-2 rounded-sm shadow-2xl">
-              <button className="absolute top-4 right-4 z-50 p-2 bg-white rounded-full" onClick={() => setSelectedProduct(null)}><X size={20}/></button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedProduct(null)} className="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer" />
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto grid md:grid-cols-2 rounded-sm shadow-2xl cursor-default">
+              <button className="absolute top-4 right-4 z-50 p-2 bg-white rounded-full cursor-pointer hover:rotate-90 transition-transform shadow-lg" onClick={() => setSelectedProduct(null)}><X size={20}/></button>
               <img src={selectedProduct.img} className="w-full h-80 md:h-full object-cover" />
               <div className="p-8 md:p-12 flex flex-col justify-center">
                 <h2 className="text-3xl font-black uppercase italic mb-4">{selectedProduct.name}</h2>
@@ -242,11 +221,11 @@ const ClothingStore = () => {
                   <label className="text-[10px] font-bold uppercase block mb-4">Size</label>
                   <div className="flex gap-2">
                     {['S', 'M', 'L'].map(s => (
-                      <button key={s} onClick={() => setSelectedSize(s)} className={`w-10 h-10 border text-xs font-bold transition-colors ${selectedSize === s ? 'bg-black text-white border-black' : 'hover:border-black'}`}>{s}</button>
+                      <button key={s} onClick={() => setSelectedSize(s)} className={`w-10 h-10 border text-xs font-bold transition-colors cursor-pointer ${selectedSize === s ? 'bg-black text-white border-black' : 'hover:border-black'}`}>{s}</button>
                     ))}
                   </div>
                 </div>
-                <button onClick={() => { handleAddToCart(selectedProduct, selectedSize); setSelectedProduct(null); }} className="w-full bg-black text-white py-5 font-bold uppercase tracking-widest">Add — ₹{selectedProduct.price.toLocaleString('en-IN')}</button>
+                <button onClick={() => { handleAddToCart(selectedProduct, selectedSize); setSelectedProduct(null); }} className="w-full bg-black text-white py-5 font-bold uppercase tracking-widest cursor-pointer hover:bg-slate-900 transition-colors">Add — ₹{selectedProduct.price.toLocaleString('en-IN')}</button>
               </div>
             </motion.div>
           </div>

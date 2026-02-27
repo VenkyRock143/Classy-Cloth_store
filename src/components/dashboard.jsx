@@ -46,10 +46,10 @@ const ClothingStore = () => {
   }, [cart]);
 
   const PRODUCTS = [
-    { id: 1, name: 'Trench Coat', price: 12499, cat: 'Outerwear', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800', desc: 'Premium gabardine construction.' },
-    { id: 2, name: 'Selvedge Denim', price: 4999, cat: 'Pants', img: 'https://images.unsplash.com/photo-1725387072845-7431bbc453bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8U2VsdmVkZ2UlMjBEZW5pbXxlbnwwfHwwfHx8MA%3D%3D', desc: 'Japanese raw denim.' },
-    { id: 3, name: 'Oversized Hoodie', price: 3499, cat: 'Basics', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', desc: 'Heavyweight organic cotton.' },
-    { id: 4, name: 'Linen Shirt', price: 2799, cat: 'Shirts', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800', desc: 'Ethically sourced linen.' }
+    { id: 1, name: 'Trench Coat', price: 2499, cat: 'Outerwear', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800', desc: 'Premium gabardine construction.' },
+    { id: 2, name: 'Selvedge Denim', price: 1499, cat: 'Pants', img: 'https://images.unsplash.com/photo-1725387072845-7431bbc453bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8U2VsdmVkZ2UlMjBEZW5pbXxlbnwwfHwwfHx8MA%3D%3D', desc: 'Japanese raw denim.' },
+    { id: 3, name: 'Oversized Hoodie', price: 1299, cat: 'Basics', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', desc: 'Heavyweight organic cotton.' },
+    { id: 4, name: 'Linen Shirt', price: 799, cat: 'Shirts', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800', desc: 'Ethically sourced linen.' }
   ];
 
   const filteredProducts = PRODUCTS.filter(p => 
